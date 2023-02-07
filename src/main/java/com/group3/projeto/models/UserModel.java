@@ -1,14 +1,15 @@
 package com.group3.projeto.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -28,6 +29,12 @@ public class UserModel {
     private int cpf;
 
     private String phone;
+
+    @OneToMany(mappedBy = "user")
+    private List<AddressModel> address;
+
+
+
 
 
 }

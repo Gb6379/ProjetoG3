@@ -6,9 +6,9 @@ import com.group3.projeto.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public List<UserModel> listAll(){
+    public List<UserModel> listUsers(){
         return userRepository.findAll();
     }
 
@@ -25,7 +25,19 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserModel find(Long id){
+    public UserModel update(UserModel user, Long id){
+        return userRepository.findById(id)
+                .map(record -> {
+                    record.setEmail(user.getEmail());
+                    record.setCpf(user.getCpf());
+                    record.setPhone(user.getPhone());
+                    return userRepository.save(record);
+                }).orElseGet(() ->{
+                   return userRepository.save(user);
+                });
+    }
+
+    public UserModel findUserById(Long id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserExceptionNotFound("Id não encontrado"));
     }
