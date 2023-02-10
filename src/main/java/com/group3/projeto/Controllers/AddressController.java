@@ -2,11 +2,14 @@ package com.group3.projeto.Controllers;
 
 
 import com.group3.projeto.models.AddressModel;
+import com.group3.projeto.models.UserModel;
+import com.group3.projeto.repositories.UserRepository;
 import com.group3.projeto.services.AddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,6 +18,7 @@ import java.util.List;
 public class AddressController {
 
     private final AddressService addresService;
+    private final UserRepository userRepository;
 
 
     @GetMapping()
@@ -22,8 +26,9 @@ public class AddressController {
         return addresService.listAddresses();
     }
 
-    @PostMapping()
-    public AddressModel save(@RequestBody AddressModel address){
-        return addresService.saveAddres(address);
+    @PutMapping("/{id}")
+    public AddressModel save(@RequestBody AddressModel address, @PathVariable Long id){
+
+        return addresService.saveAddres(address,id);
     }
 }
