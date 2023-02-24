@@ -25,10 +25,25 @@ public class AddressController {
     public List<AddressModel> listAll(){
         return addresService.listAddresses();
     }
+    @GetMapping("/{id}")
+    public AddressModel getAddress(@PathVariable Long id){
+        return addresService.getAddress(id);
+    }
 
-    @PutMapping("/{id}")
+    @PutMapping("/user/{id}")
     public AddressModel save(@RequestBody AddressModel address, @PathVariable Long id){
-
         return addresService.saveAddres(address,id);
     }
+
+    @PutMapping("/{id}")
+    public AddressModel updateAddress(@RequestBody AddressModel address, @PathVariable Long id) {
+        return addresService.updateAddress(address,id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(Long id){
+        addresService.deleteAddress(id);
+    }
+
+
 }

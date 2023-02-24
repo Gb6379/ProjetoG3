@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseError {
     private String error;
-    public static ResponseError UserNotFoundException(String msg){//message to be displayed on error
+    public static ResponseError NotFoundException(String msg){//message to be displayed on error
         ResponseError response =  new ResponseError();
         response.error = msg;
         return response;
     }
+
 }
