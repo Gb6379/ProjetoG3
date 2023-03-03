@@ -3,6 +3,7 @@ package com.group3.projeto.Controllers;
 import com.group3.projeto.models.UserModel;
 import com.group3.projeto.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,8 +12,10 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor//this annotation sets up the class contructos that would be necessary to initialize the UserService whithin the cointroller
 @RequestMapping("/users")
+//@CrossOrigin(origins = "http://localhost:9090")
 public class UserController {
 
+    @Autowired
     private final UserService userService;
 
     @GetMapping("/users")

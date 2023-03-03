@@ -7,46 +7,33 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
-
-
 @Entity
-@Table(name = "Endereco")
+@Table(name = "produto")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressModel {
-
+public class ProductModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    private String street;
+    private String name;
 
-    private String neighborhood;
+    private int value;
 
-    private String city;
+    private int amount;
 
-    private String state;
-
-    private String cep;
+    //categoria relationship
+    @JsonBackReference
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="category_id", referencedColumnName = "id")
+    CategoryModel category;
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="user_id", referencedColumnName = "id")
-    private UserModel user;
-
-    @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="company_id", referencedColumnName = "id")
-    private CompanyModel company;
-
-    @OneToOne(mappedBy = "address")
-    OrderModel order;
-
-
-
+    @JoinColumn(name="carrinho_id", referencedColumnName = "id")
+    CartModel cart;
 
 }

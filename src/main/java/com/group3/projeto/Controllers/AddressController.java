@@ -6,6 +6,7 @@ import com.group3.projeto.models.UserModel;
 import com.group3.projeto.repositories.UserRepository;
 import com.group3.projeto.services.AddressService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,9 @@ import java.util.Optional;
 @RequestMapping("/address")
 public class AddressController {
 
+    @Autowired
     private final AddressService addresService;
+    @Autowired
     private final UserRepository userRepository;
 
 
