@@ -39,12 +39,12 @@ public class AddressController {
     }
 
     @PutMapping("/{id}")
-    public AddressModel updateAddress(@RequestBody AddressModel address, @PathVariable Long id) {
+    public AddressModel update(@RequestBody AddressModel address, @PathVariable Long id) {
         return addresService.updateAddress(address,id);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(Long id){
+    public void delete(@PathVariable Long id){
         addresService.deleteAddress(id);
     }
 

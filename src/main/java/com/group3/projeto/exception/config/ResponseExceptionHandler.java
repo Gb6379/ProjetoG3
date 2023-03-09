@@ -1,6 +1,7 @@
 package com.group3.projeto.exception.config;
 
 import com.group3.projeto.exception.errors.AddressExceptionNotFound;
+import com.group3.projeto.exception.errors.CategoryExceptionNotFound;
 import com.group3.projeto.exception.errors.UserExceptionNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +20,12 @@ public class ResponseExceptionHandler {
     @ExceptionHandler(AddressExceptionNotFound.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseError handleError(AddressExceptionNotFound e){
+        return ResponseError.NotFoundException(e.getMessage());
+    }
+
+    @ExceptionHandler(CategoryExceptionNotFound.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseError handleError(CategoryExceptionNotFound e){
         return ResponseError.NotFoundException(e.getMessage());
     }
 }
