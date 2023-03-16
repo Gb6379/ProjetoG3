@@ -29,7 +29,7 @@ public class PaymentModel {
 
     private boolean payOnDelivery;
 
-    @JsonBackReference
+    @JsonBackReference(value="user-reference")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private UserModel user;
