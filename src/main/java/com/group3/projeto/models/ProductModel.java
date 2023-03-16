@@ -26,14 +26,9 @@ public class ProductModel {
     private int amount;
 
     //categoria relationship
-    @JsonBackReference
+    @JsonBackReference(value="category-reference")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="category_id", referencedColumnName = "id")
-    CategoryModel category;
-
-    @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="carrinho_id", referencedColumnName = "id")
-    CartModel cart;
+    private CategoryModel category;
 
 }

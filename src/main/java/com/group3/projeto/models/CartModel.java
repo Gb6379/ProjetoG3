@@ -8,8 +8,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "carrinho")
@@ -23,16 +27,28 @@ public class CartModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "cart")
-    @JsonIgnore
-    private List<ProductModel> products;
 
+
+    @JsonBackReference(value="cartUser-reference")
     @OneToOne(cascade = CascadeType.ALL )
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    UserModel user;
+    private UserModel user;
 
+    @JsonManagedReference(value="cartOrder-reference")
     @OneToOne(mappedBy = "cart")
-    OrderModel order;
+    private OrderModel order;
+
+    @JsonBackReference(value="role-reference")
+    @ManyToMany
+    @JoinTable(name = "cart_proudcts",
+            joinColumns = @JoinColumn(name="cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Set<ProductModel> products = new HashSet<>();
+
+    public void addProduct(ProductModel product){
+        this.products.add(product);
+    }
 
 }
