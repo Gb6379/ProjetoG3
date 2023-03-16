@@ -1,6 +1,7 @@
 package com.group3.projeto.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class AddressModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private String street;
 
@@ -33,18 +34,19 @@ public class AddressModel {
 
     private String cep;
 
-    @JsonBackReference
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonBackReference(value="address-reference")
+    @ManyToOne()
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private UserModel user;
 
-    @JsonBackReference
+    @JsonBackReference(value="company-reference")
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="company_id", referencedColumnName = "id")
     private CompanyModel company;
 
+    @JsonManagedReference(value="addressOrder-reference")
     @OneToOne(mappedBy = "address")
-    OrderModel order;
+    private OrderModel order;
 
 
 

@@ -1,10 +1,13 @@
 package com.group3.projeto.services;
 
 import com.group3.projeto.exception.errors.UserExceptionNotFound;
+import com.group3.projeto.models.RoleModel;
 import com.group3.projeto.models.UserModel;
+import com.group3.projeto.repositories.RoleRepository;
 import com.group3.projeto.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,14 +18,42 @@ import java.util.Optional;
 @Slf4j
 public class UserService {
 
+   @Autowired
     private final UserRepository userRepository;
+
+   @Autowired
+   private final RoleRepository roleRepository;
+
+   @Autowired
+   private final AddressService addressService;
 
     public List<UserModel> listUsers(){
         return userRepository.findAll();
     }
 
-    public UserModel save(UserModel user){
+    public UserModel save(UserModel user){//do the same thing as in addressService, but it would be better to have a specific methos to set user roles
         return userRepository.save(user);
+    }
+
+   /* public UserModel setRole(Long id){
+        Set<RoleModel> admin = roleRepository.findByDescricao("admin");
+        return userRepository.findById(id)
+                .map(record -> {
+                    record.addRole(admin);
+                    return userRepository.save(record);
+                }).orElseThrow(() ->
+                        new UserExceptionNotFound("Id não encontrado"
+                ));
+    }*/
+
+    public UserModel setRole(Long id){
+
+     UserModel user = userRepository.findById(id).get();
+     RoleModel role = roleRepository.findByDescricao("admin");
+     user.addRole(role);
+
+     return userRepository.save(user);
+
     }
 
     public UserModel update(UserModel user, Long id){
@@ -43,14 +74,11 @@ public class UserService {
     }
 
     public void delete(Long id){
-        try {
-            userRepository.deleteById(id);
-        } catch (UserExceptionNotFound e){
-            throw new UserExceptionNotFound("id nao localizado");
-
+        UserModel user = this.findUserById(id);
+        //user.setRole(null);
+        userRepository.deleteById(id);
         }
 
-    }
 
 
 }

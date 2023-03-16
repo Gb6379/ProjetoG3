@@ -33,7 +33,7 @@ public class AddressController {
         return addresService.getAddress(id);
     }
 
-    @PutMapping("/user/{id}")
+    @PostMapping("/user/{id}")
     public AddressModel save(@RequestBody AddressModel address, @PathVariable Long id){
         return addresService.saveAddres(address,id);
     }

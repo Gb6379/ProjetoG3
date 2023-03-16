@@ -7,6 +7,7 @@ import com.group3.projeto.repositories.AddressRepository;
 import com.group3.projeto.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,9 @@ import java.util.Optional;
 @Slf4j
 public class AddressService {
 
+    @Autowired
     private final AddressRepository addressRepository;
+    @Autowired
     private final UserRepository userRepository;
 
     public List<AddressModel> listAddresses(){
@@ -50,5 +53,9 @@ public class AddressService {
 
     public void deleteAddress(Long id){
         addressRepository.deleteById(id);
+    }
+
+    public void deleteAll(){
+        addressRepository.deleteAll();
     }
 }

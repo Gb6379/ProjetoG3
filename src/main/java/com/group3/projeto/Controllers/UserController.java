@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private final UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping()
     public List<UserModel> listAll() {
         return userService.listUsers();
     }
@@ -33,12 +33,17 @@ public class UserController {
         return userService.save(user);
     }
 
+    @PutMapping("/role/{id}")
+    public UserModel addRole(@PathVariable Long id){
+         return userService.setRole(id);
+    }
+
     @PutMapping("/{id}")
     public UserModel update(@RequestBody UserModel user, @PathVariable Long id){
         return userService.update(user,id);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable Long id){
         userService.delete(id);
     }
