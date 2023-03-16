@@ -6,6 +6,7 @@ import com.group3.projeto.models.CategoryModel;
 import com.group3.projeto.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @Slf4j
 public class CategoryService {
 
+    @Autowired
     CategoryRepository categoryRepository;
 
     public List<CategoryModel> listCtegories(){

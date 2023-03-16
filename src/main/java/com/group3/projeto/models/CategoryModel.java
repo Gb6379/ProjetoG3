@@ -24,7 +24,7 @@ public class CategoryModel {
 
     private String tipo;
 
-    @JsonManagedReference
+    @JsonManagedReference(value="category-reference")
     @OneToMany(mappedBy = "category")
     @JsonIgnore
     private List<ProductModel> product;
