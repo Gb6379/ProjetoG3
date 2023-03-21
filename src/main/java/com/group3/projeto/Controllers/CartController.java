@@ -37,6 +37,11 @@ public class CartController {
         return cartService.updateCart(cart,id);
     }
 
+    @PutMapping("/product/{product_id}/{cart_id}")
+    public CartModel addProduct(@PathVariable Long product_id,@PathVariable Long cart_id){
+        return cartService.addToCart(product_id,cart_id);
+    }
+
     @DeleteMapping("/{id}")
     public void delete(Long id){
         cartService.deleteCart(id);

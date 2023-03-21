@@ -17,7 +17,7 @@ import java.util.List;
 public class CategoryService {
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public List<CategoryModel> listCtegories(){
         return categoryRepository.findAll();

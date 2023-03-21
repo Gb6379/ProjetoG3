@@ -17,10 +17,10 @@ import java.util.Optional;
 public class RoleService {
 
     @Autowired
-    RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public RoleModel save(RoleModel role){
         return roleRepository.save(role);

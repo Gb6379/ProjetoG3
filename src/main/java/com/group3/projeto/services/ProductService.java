@@ -1,13 +1,17 @@
 package com.group3.projeto.services;
 
+import com.group3.projeto.models.CategoryModel;
 import com.group3.projeto.models.ProductModel;
+import com.group3.projeto.repositories.CategoryRepository;
 import com.group3.projeto.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +22,10 @@ public class ProductService {
     @Autowired
     private final ProductRepository productRepository;
 
+    @Autowired
+    private  final CategoryRepository categoryRepository;
+
+
     public List<ProductModel> listProducts(){
         return productRepository.findAll();
     }
@@ -26,8 +34,21 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow();
     }
 
-    public ProductModel saveProduct(ProductModel product){
+    public ProductModel saveProduct(ProductModel product,Long id){
+        Optional<CategoryModel> category = categoryRepository.findById(id);
+        product.setCategory(category.get());
         return productRepository.save(product);
+    }
+
+    public List<ProductModel> addCategory(String product_name, Long category_id){
+        Optional<CategoryModel> category = categoryRepository.findById(category_id);
+        List<ProductModel> product = productRepository.findByName(product_name);
+        product.forEach(p -> {
+            p.setCategory(category.get());
+            productRepository.save(p);
+        });
+       //product.setCategory(category.get());
+        return product;
     }
 
     public ProductModel updateProduct(ProductModel product, Long id){
@@ -35,7 +56,6 @@ public class ProductService {
             record.setAmount(product.getAmount());
             record.setName(product.getName());
             record.setValue(product.getValue());
-            record.setCategory(product.getCategory());
             return productRepository.save(record);
         }).orElseGet(() -> {
             return productRepository.save(product);

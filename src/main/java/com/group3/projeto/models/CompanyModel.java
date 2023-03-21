@@ -28,7 +28,7 @@ public class CompanyModel {
 
     private int phone;
 
-    @JsonManagedReference
+    @JsonManagedReference(value="company-reference")
     @OneToMany(mappedBy = "company")
     @JsonIgnore
     private List<AddressModel> addresses;

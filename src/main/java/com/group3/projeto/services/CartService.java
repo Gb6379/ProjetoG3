@@ -1,7 +1,9 @@
 package com.group3.projeto.services;
 
 import com.group3.projeto.models.CartModel;
+import com.group3.projeto.models.ProductModel;
 import com.group3.projeto.repositories.CartRepository;
+import com.group3.projeto.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class CartService {
 
     @Autowired
     private final CartRepository cartRepository;
+
+    @Autowired
+    private final ProductRepository productRepository;
 
     public List<CartModel> ListCarts(){
         return cartRepository.findAll();
@@ -41,6 +46,15 @@ public class CartService {
         }).orElseGet(() -> {
             return cartRepository.save(cart);
         });
+    }
+
+    public CartModel addToCart(Long productId, Long cartId){
+        ProductModel product = productRepository.findById(productId).get();
+        CartModel cart = cartRepository.findById(cartId).get();
+        cart.addProduct(product);
+
+        return cartRepository.save(cart);
+
     }
 
     public void deleteCart(Long id){

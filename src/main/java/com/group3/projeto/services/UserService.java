@@ -35,17 +35,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-   /* public UserModel setRole(Long id){
-        Set<RoleModel> admin = roleRepository.findByDescricao("admin");
-        return userRepository.findById(id)
-                .map(record -> {
-                    record.addRole(admin);
-                    return userRepository.save(record);
-                }).orElseThrow(() ->
-                        new UserExceptionNotFound("Id não encontrado"
-                ));
-    }*/
-
     public UserModel setRole(Long id){
 
      UserModel user = userRepository.findById(id).get();

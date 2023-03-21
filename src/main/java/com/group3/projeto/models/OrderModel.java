@@ -1,5 +1,7 @@
 package com.group3.projeto.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,12 +20,14 @@ public class OrderModel {
     private long id;
 
     //addres relationship
+    @JsonBackReference(value="addressOrder-reference")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "addres_id", referencedColumnName = "id")
-    AddressModel address;
+    private AddressModel address;
 
     //carrinho relationship
+    @JsonBackReference(value="cartOrder-reference")
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
-    CartModel cart;
+    private CartModel cart;
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoleController {
 
     @Autowired
-    RoleService roleService;
+    private final RoleService roleService;
 
     @PostMapping
     public RoleModel save(@RequestBody RoleModel role){
