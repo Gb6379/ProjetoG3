@@ -8,9 +8,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.GeneratedColumn;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,28 +29,28 @@ public class CartModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    private String productName;
 
+    @Column(name = "created_date")
+    private Date createdDate;
 
-    @JsonBackReference(value="cartUser-reference")
-    @OneToOne(cascade = CascadeType.ALL )
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference(value="cartProd-reference")
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private ProductModel product;
+
+    @JsonIgnore
+    @OneToOne(targetEntity = UserModel.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private UserModel user;
 
-    @JsonManagedReference(value="cartOrder-reference")
-    @OneToOne(mappedBy = "cart")
-    private OrderModel order;
+    private int quantity;
 
-    @JsonBackReference(value="role-reference")
-    @ManyToMany
-    @JoinTable(name = "cart_proudcts",
-            joinColumns = @JoinColumn(name="cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<ProductModel> products = new HashSet<>();
 
-    public void addProduct(ProductModel product){
-        this.products.add(product);
+    public CartModel(ProductModel product, int quantity, UserModel user) {
+        this.user = user;
+        this.product = product;
+        this.quantity = quantity;
+        this.createdDate = new Date();
     }
-
 }

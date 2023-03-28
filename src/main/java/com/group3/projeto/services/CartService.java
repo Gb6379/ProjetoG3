@@ -1,17 +1,21 @@
 package com.group3.projeto.services;
 
+import com.group3.projeto.dto.AddCartDto;
 import com.group3.projeto.models.CartModel;
 import com.group3.projeto.models.ProductModel;
+import com.group3.projeto.models.UserModel;
 import com.group3.projeto.repositories.CartRepository;
 import com.group3.projeto.repositories.ProductRepository;
+import com.group3.projeto.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,40 +28,82 @@ public class CartService {
     @Autowired
     private final ProductRepository productRepository;
 
+    @Autowired
+    private final UserRepository userRepository;
+
     public List<CartModel> ListCarts(){
         return cartRepository.findAll();
     }
 
-    public CartModel getCart(Long id){
-        return cartRepository.findById(id).orElseThrow();
+    public CartModel getCartProduct(Long id){
+        CartModel cart = cartRepository.findById(id).get();
+        return cart;
     }
 
-    public CartModel saveCart(CartModel cart){
-        return cartRepository.save(cart);
+
+    public CartModel saveCart(Long productId,Long userId){
+        UserModel user = userRepository.findById(userId).get();
+        ProductModel product = productRepository.findById(productId).get();
+
+        CartModel newCart = new CartModel();
+        int newamountAdd = newCart.getQuantity();
+        newamountAdd = newamountAdd + 1;
+        Date date = new Date();
+        newCart.setCreatedDate(date);
+        newCart.setProductName(product.getName());
+        newCart.setQuantity(newamountAdd);
+        newCart.setUser(user);
+        newCart.setProduct(product);
+
+        return cartRepository.save(newCart);
     }
 
-    public CartModel updateCart(CartModel cart, Long id){
-        return cartRepository.findById(id)
-                .map(record -> {
-            record.setUser(cart.getUser());
-            record.setOrder(cart.getOrder());
-            record.setProducts(cart.getProducts());
-            return cartRepository.save(record);
-        }).orElseGet(() -> {
-            return cartRepository.save(cart);
-        });
+    public CartModel updateCart(AddCartDto cartDto, ProductModel product, UserModel user, Long cart_id){
+        int amount = product.getAmount();
+        amount = amount - cartDto.getQuantity();
+        product.setAmount(amount);
+        productRepository.save(product);
+        CartModel cartmodel = cartRepository.findById(cart_id).get();
+        cartmodel.setQuantity(cartDto.getQuantity());
+        cartmodel.setCreatedDate(new Date());
+        return cartRepository.save(cartmodel);
     }
 
-    public CartModel addToCart(Long productId, Long cartId){
+    public String addCart(AddCartDto addCartDto, ProductModel product, UserModel user){
+        int amount = product.getAmount();
+        amount = amount - addCartDto.getQuantity();
+        product.setAmount(amount);
+        productRepository.save(product);
+        CartModel cart = new CartModel(product,addCartDto.getQuantity(),user);
+        cart.setProductName(product.getName());
+        cartRepository.save(cart);
+
+        return "Produto adicionado com sucesso";
+    }
+
+    public void deleteCart(Long productId, Long cartId){
         ProductModel product = productRepository.findById(productId).get();
         CartModel cart = cartRepository.findById(cartId).get();
-        cart.addProduct(product);
+        int p_amount = product.getAmount();
 
-        return cartRepository.save(cart);
+        p_amount = p_amount + 1;
+        product.setAmount(p_amount);
+        productRepository.save(product);
 
+        int amount = cart.getQuantity();
+        if(amount == 1){
+            cartRepository.deleteById(cartId);
+        }else {
+            amount = amount - 1;
+
+            cart.setQuantity(amount);
+            cartRepository.save(cart);
+        }
+           // }
+        //cartRepository.deleteById(cartId);
     }
 
-    public void deleteCart(Long id){
-        cartRepository.deleteById(id);
+    public void deleteAll(){
+        cartRepository.deleteAll();
     }
 }
