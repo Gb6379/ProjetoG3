@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -22,10 +24,15 @@ public class CategoryModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String tipo;
+    private String categoryName;
+
+    private String description;
+
+    private String imageUrl;
 
     @JsonManagedReference(value="category-reference")
     @OneToMany(mappedBy = "category")
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ProductModel> product;
 }

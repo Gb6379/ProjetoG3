@@ -49,9 +49,10 @@ public class UserModel {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PaymentModel> payments;
 
-    @JsonManagedReference(value="cartUser-reference")
-    @OneToOne(mappedBy = "user")
-    private CartModel cart;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",
+            fetch = FetchType.LAZY)
+    private List<OrderModel> orders;
 
     @JsonBackReference(value="role-reference")
     @ManyToMany

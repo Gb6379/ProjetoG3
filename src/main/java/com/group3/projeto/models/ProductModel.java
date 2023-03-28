@@ -1,11 +1,17 @@
 package com.group3.projeto.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "produto")
@@ -21,7 +27,9 @@ public class ProductModel {
 
     private String name;
 
-    private int value;
+    private double price;
+
+    private String imageUrl;
 
     private int amount;
 
@@ -30,5 +38,20 @@ public class ProductModel {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="category_id", referencedColumnName = "id")
     private CategoryModel category;
+
+    @JsonIgnore
+    @JsonManagedReference(value="cartProd-reference")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    private List<CartModel> carts;
+
+    public void addProduct(CartModel p){
+        this.carts.add(p);
+    }
+
+
+
+
+
+
 
 }
