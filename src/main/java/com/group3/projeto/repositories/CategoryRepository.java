@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryModel,Long> {
 
-   public CategoryModel findByTipo(String tipo);
+   //public CategoryModel findByTipo(String tipo);
 }

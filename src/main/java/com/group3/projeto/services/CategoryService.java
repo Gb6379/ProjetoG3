@@ -33,7 +33,8 @@ public class CategoryService {
 
     public CategoryModel updateCategory(CategoryModel category, Long id){
             return categoryRepository.findById(id).map(record -> {
-                record.setTipo(category.getTipo());
+                record.setCategoryName(category.getCategoryName());
+                record.setDescription(category.getDescription());
                 return categoryRepository.save(record);
             }).orElseGet( () -> {
                     return categoryRepository.save(category);

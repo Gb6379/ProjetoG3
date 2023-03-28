@@ -27,9 +27,14 @@ public class ProductController {
         return productService.getProduct(id);
     }
 
-    @PostMapping("/category/{id}")
+    @PostMapping("/category/{category_id}")
     public ProductModel save(@RequestBody ProductModel product, @PathVariable Long category_id){
-        return productService.saveProduct(product, category_id);
+        return productService.saveProductandCategory(product, category_id);
+    }
+
+    @PostMapping
+    public ProductModel save(@RequestBody ProductModel product){
+        return productService.onlySaveProduct(product);
     }
 
     @PutMapping("/{id}")

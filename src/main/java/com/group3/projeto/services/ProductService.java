@@ -34,9 +34,13 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow();
     }
 
-    public ProductModel saveProduct(ProductModel product,Long id){
+    public ProductModel saveProductandCategory(ProductModel product,Long id){
         Optional<CategoryModel> category = categoryRepository.findById(id);
         product.setCategory(category.get());
+        return productRepository.save(product);
+    }
+
+    public ProductModel onlySaveProduct(ProductModel product){
         return productRepository.save(product);
     }
 
@@ -55,7 +59,7 @@ public class ProductService {
         return productRepository.findById(id).map(record -> {
             record.setAmount(product.getAmount());
             record.setName(product.getName());
-            record.setValue(product.getValue());
+            record.setPrice(product.getPrice());
             return productRepository.save(record);
         }).orElseGet(() -> {
             return productRepository.save(product);
