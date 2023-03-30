@@ -1,6 +1,7 @@
 package com.group3.projeto.Controllers;
 
 import com.group3.projeto.dto.AddCartDto;
+import com.group3.projeto.dto.CartListDto;
 import com.group3.projeto.models.CartModel;
 import com.group3.projeto.models.ProductModel;
 import com.group3.projeto.models.UserModel;
@@ -35,9 +36,9 @@ public class CartController {
         return cartService.ListCarts();
     }
 
-    @GetMapping("/{id}")
-    public CartModel getCartByUserId(@PathVariable Long id){
-        return cartService.getCartProduct(id);
+    @GetMapping("/{user_id}")
+    public CartListDto getCartByUserId(@PathVariable Long user_id){
+        return cartService.getCartProduct(user_id);
     }
 
 
@@ -54,16 +55,27 @@ public class CartController {
         return cartService.updateCart(cartDto, product, user, cart_id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     public String addCart(@RequestBody AddCartDto addCartDto){//set the item's amount that's gonna be add and diminsh from its total amount
         UserModel user = userService.findUserById(addCartDto.getUserId());
         ProductModel product = productService.getProduct(addCartDto.getProductId());
         return cartService.addCart(addCartDto, product, user);
     }
 
-    @DeleteMapping("/{product_id}/{cart_id}")
-    public void delete(@PathVariable Long product_id, @PathVariable Long cart_id){
-        cartService.deleteCart(product_id,cart_id);
+    @PutMapping("/addItem/{user_id}/{product_id}")
+    public String addItem(@PathVariable Long user_id, @PathVariable Long product_id){
+        return cartService.addItem(user_id, product_id);
+    }
+
+
+    @DeleteMapping("/removeItem/{user_id}/{product_id}")
+    public String removeItem(@PathVariable Long user_id, @PathVariable Long product_id){
+        return cartService.deleteItem(user_id,product_id);
+    }
+
+    @DeleteMapping("/emptyCart/{user_id}")
+    public String deleteCartItems(@PathVariable Long user_id){
+        return cartService.deleteItems(user_id);
     }
 
     @DeleteMapping
