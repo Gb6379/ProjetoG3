@@ -44,11 +44,6 @@ public class AddressModel {
     @JoinColumn(name="company_id", referencedColumnName = "id")
     private CompanyModel company;
 
-    @JsonManagedReference(value="addressOrder-reference")
-    @OneToOne(mappedBy = "address")
-    private OrderModel order;
-
-
 
 
 }

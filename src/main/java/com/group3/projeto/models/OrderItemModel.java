@@ -25,7 +25,7 @@ public class OrderItemModel {
     private int quantity;
 
     @Column(name = "price")
-    private int price;
+    private double price;
 
 
     @Column(name = "created_date")

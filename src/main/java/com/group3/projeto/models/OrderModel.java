@@ -32,18 +32,12 @@ public class OrderModel {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItemModel> orderItems;
 
+    private String sessionId;
+
     @ManyToOne()
     @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserModel user;
 
-    //addres relationship
-    @JsonBackReference(value="addressOrder-reference")
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "addres_id", referencedColumnName = "id")
-    private AddressModel address;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = CartModel.class)
-    @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private List<CartModel> cartItems;
 }
