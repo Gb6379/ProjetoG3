@@ -5,12 +5,16 @@ import com.group3.projeto.dto.CartListDto;
 import com.group3.projeto.models.CartModel;
 import com.group3.projeto.models.ProductModel;
 import com.group3.projeto.models.UserModel;
+import com.group3.projeto.res.ApiResponse;
 import com.group3.projeto.services.CartService;
 import com.group3.projeto.services.ProductService;
 import com.group3.projeto.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,15 +41,9 @@ public class CartController {
     }
 
     @GetMapping("/{user_id}")
-    public CartListDto getCartByUserId(@PathVariable Long user_id){
-        return cartService.getCartProduct(user_id);
-    }
-
-
-
-    @PostMapping("/{product_id}/{user_id}")
-    public CartModel save(@PathVariable Long product_id,@PathVariable Long user_id){//this endpoint is not used, because the addProduct does its job when a product is added to users cart
-        return cartService.saveCart(product_id,user_id);
+    public ResponseEntity<CartListDto> getCartByUserId(@PathVariable Long user_id){
+        CartListDto cart = cartService.getCartProducts(user_id);
+        return new ResponseEntity<CartListDto>(cart, HttpStatus.OK);
     }
 
     @PutMapping("/{cart_id}")
@@ -56,15 +54,16 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public String addCart(@RequestBody AddCartDto addCartDto){//set the item's amount that's gonna be add and diminsh from its total amount
+    public String addCart(@Valid @RequestBody AddCartDto addCartDto){//set the item's amount that's gonna be add and diminsh from its total amount
         UserModel user = userService.findUserById(addCartDto.getUserId());
         ProductModel product = productService.getProduct(addCartDto.getProductId());
         return cartService.addCart(addCartDto, product, user);
     }
 
     @PutMapping("/addItem/{user_id}/{product_id}")
-    public String addItem(@PathVariable Long user_id, @PathVariable Long product_id){
-        return cartService.addItem(user_id, product_id);
+    public ResponseEntity<String> addItem(@PathVariable Long user_id, @PathVariable Long product_id){
+         cartService.addItem(user_id, product_id);
+        return new ResponseEntity<String>("Item adicionado",HttpStatus.OK);
     }
 
 

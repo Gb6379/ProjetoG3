@@ -36,7 +36,7 @@ public class CartService {
         return cartRepository.findAll();
     }
 
-    public CartListDto getCartProduct(Long user_id){
+    public CartListDto getCartProducts(Long user_id){
         List<CartModel> userCartItems = cartRepository.findByUserId(user_id);
         List<CartItemDto> cartItems = new ArrayList<>();
         userCartItems.forEach(item ->{
@@ -54,23 +54,6 @@ public class CartService {
         return new CartItemDto(cart);
     }
 
-    public CartModel saveCart(Long productId,Long userId){
-        UserModel user = userRepository.findById(userId).get();
-        ProductModel product = productRepository.findById(productId).get();
-
-        CartModel newCart = new CartModel();
-        int newamountAdd = newCart.getQuantity();
-        newamountAdd = newamountAdd + 1;
-        Date date = new Date();
-        newCart.setCreatedDate(date);
-        newCart.setProductName(product.getName());
-        newCart.setQuantity(newamountAdd);
-        newCart.setUser(user);
-        newCart.setProduct(product);
-
-        return cartRepository.save(newCart);
-    }
-
     public CartModel updateCart(AddCartDto cartDto, ProductModel product, UserModel user, Long cart_id){
         int amount = product.getAmount();
         amount = amount - cartDto.getQuantity();
@@ -80,22 +63,26 @@ public class CartService {
         cartmodel.setQuantity(cartDto.getQuantity());
         cartmodel.setCreatedDate(new Date());
         return cartRepository.save(cartmodel);
+
+
     }
 
     public String addCart(AddCartDto addCartDto, ProductModel product, UserModel user){
         int amount = product.getAmount();
+        if(amount == 0){
+            return "produto fora do estoque";//do exception
+        }
         amount = amount - addCartDto.getQuantity();
         product.setAmount(amount);
         productRepository.save(product);
         CartModel cart = new CartModel(product,addCartDto.getQuantity(),user);
         cart.setProductName(product.getName());
         cartRepository.save(cart);
-
-        return "Produto adicionado com sucesso";
+        return "created";
     }
 
 
-    public String addItem(Long user_id,Long product_id){
+    public void addItem(Long user_id, Long product_id){
         List<CartModel> userCartItems = cartRepository.findByUserId(user_id);//if this is empty create a cart
         ProductModel product = productRepository.findById(product_id).get();
        // boolean containsProduct = userCartItems.contains(product.getCarts().get(0).getId());
@@ -103,9 +90,9 @@ public class CartService {
         //if(containsProduct == false) //wordk this out and make a way to creat a cart in case user add an item thres no cart in the db
             userCartItems.forEach(item -> {
                 if (item.getProduct().getId() == product_id) {
-                    //if(product.getAmount() == 0){
-                        //exception saying product out of stock
-                    //}
+                   /* if(product.getAmount() == 0){
+                        throw new RuntimeException("Produto fora de estoque");
+                    }*/
                     CartModel cart = cartRepository.findById(item.getId()).get();
                     //ProductModel product = productRepository.findById(product_id).get();//get product from id table
                     int quantity = cart.getQuantity() + 1;//get item cart quantity and dimish one from it
@@ -114,13 +101,9 @@ public class CartService {
                     product.setAmount(amount);
                     cartRepository.save(cart);
                     productRepository.save(product);
-                    if (item.getQuantity() == 0) {
-                        cartRepository.deleteById(cart.getId());
-                    }
                 }
             });
 
-        return "item adicionado";
     }
 
     public String deleteItems(Long user_id){
