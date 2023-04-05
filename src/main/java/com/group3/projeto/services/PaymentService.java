@@ -17,8 +17,7 @@ import java.util.List;
 @Slf4j
 public class PaymentService {
 
-    @Autowired
-    APIContext apiContext;
+    private final APIContext apiContext;
 
     public Payment createPayment(Double total,
                                  String currency,

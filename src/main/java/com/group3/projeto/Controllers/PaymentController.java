@@ -14,7 +14,7 @@ import com.paypal.api.payments.Payment;
 public class PaymentController {
 
     @Autowired
-    PaymentService paymentService;
+    private final PaymentService paymentService;
 
     public static final String SUCCESS_URL = "pay/success";
     public static final String CANCEL_URL = "pay/cancel";

@@ -38,7 +38,6 @@ public class UserModel implements UserDetails {
     private String firstName;
 
     private String lastName;
-
     @Email
     private String email;
 
