@@ -39,14 +39,17 @@ public class ProductModel {
     @JoinColumn(name="category_id", referencedColumnName = "id")
     private CategoryModel category;
 
+    //categoria relationship
+    @JsonBackReference(value="companyP-reference")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="company_id", referencedColumnName = "id")
+    private CompanyModel company;
+
     @JsonIgnore
     @JsonManagedReference(value="cartProd-reference")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     private List<CartModel> carts;
 
-    public void addProduct(CartModel p){
-        this.carts.add(p);
-    }
 
 
 

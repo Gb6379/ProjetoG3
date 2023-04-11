@@ -15,6 +15,10 @@ public class RegisterRequest {
 
     private  String lastname;
 
+    private String cpf;
+
+    private String cnpj;
+
     private String email;
 
     private String password;

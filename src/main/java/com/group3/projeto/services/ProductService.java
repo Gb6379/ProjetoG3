@@ -2,7 +2,9 @@ package com.group3.projeto.services;
 
 import com.group3.projeto.models.CategoryModel;
 import com.group3.projeto.models.ProductModel;
+import com.group3.projeto.repositories.AuthRepository;
 import com.group3.projeto.repositories.CategoryRepository;
+import com.group3.projeto.repositories.CompanyRepository;
 import com.group3.projeto.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,11 @@ public class ProductService {
     @Autowired
     private  final CategoryRepository categoryRepository;
 
+    private final JwtService jwtService;
+
+    private final CompanyRepository companyRepository;
+
+
 
     public List<ProductModel> listProducts(){
         return productRepository.findAll();
@@ -40,7 +47,11 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public ProductModel onlySaveProduct(ProductModel product){
+    public ProductModel onlySaveProduct(ProductModel product, String token){
+        var jwtToken = token.substring(7);
+        var companyMail = jwtService.extractUser(jwtToken);
+        var company = companyRepository.findByEmail(companyMail).get();
+        product.setCompany(company);
         return productRepository.save(product);
     }
 

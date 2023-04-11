@@ -32,9 +32,9 @@ public class ProductController {
         return productService.saveProductandCategory(product, category_id);
     }
 
-    @PostMapping
-    public ProductModel save(@RequestBody ProductModel product){
-        return productService.onlySaveProduct(product);
+    @PostMapping()
+    public ProductModel saveProduct(@RequestBody ProductModel product,@RequestHeader (name="Authorization") String token){
+        return productService.onlySaveProduct(product, token);
     }
 
     @PutMapping("/{id}")

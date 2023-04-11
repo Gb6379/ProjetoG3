@@ -1,5 +1,7 @@
 package com.group3.projeto.config;
 
+import com.group3.projeto.models.UserModel;
+import com.group3.projeto.repositories.CompanyRepository;
 import com.group3.projeto.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Optional;
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -22,18 +26,29 @@ public class ApplicationConfig {
     @Autowired
     private final UserRepository userRepository;
 
+    @Autowired
+    private final CompanyRepository companyRepository;
+
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            Optional<UserModel> byEmail = userRepository.findByEmail(username);
+            if(byEmail.isPresent()){
+                return byEmail.get();
+            }
+            return companyRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        };
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider  = new DaoAuthenticationProvider();
+
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
+
     }
 
     @Bean

@@ -62,23 +62,14 @@ public class UserModel implements UserDetails {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PaymentModel> payments;
 
+    @OneToMany(mappedBy = "user")
+    private List<AuthenticationTokenModel> tokens;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user",
             fetch = FetchType.LAZY)
     private List<OrderModel> orders;
 
-    @JsonBackReference(value="role-reference")
-    @ManyToMany
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name="user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<RoleModel> roles = new HashSet<>();
-
-    public void addRole(RoleModel roles){
-        this.roles.add(roles);
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -89,6 +80,7 @@ public class UserModel implements UserDetails {
     public String getUsername() {
         return email;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

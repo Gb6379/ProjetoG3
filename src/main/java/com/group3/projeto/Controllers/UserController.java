@@ -33,11 +33,6 @@ public class UserController {
         return userService.save(user);
     }
 
-    @PutMapping("/role/{id}")
-    public UserModel addRole(@PathVariable Long id){
-         return userService.setRole(id);
-    }
-
     @PutMapping("/{id}")
     public UserModel update(@RequestBody UserModel user, @PathVariable Long id){
         return userService.update(user,id);

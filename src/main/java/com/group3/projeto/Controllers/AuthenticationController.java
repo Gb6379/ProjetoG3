@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    @Autowired
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
@@ -27,8 +26,13 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/user/authenticate")
     public ResponseEntity<AuthResponse>authenticate(@RequestBody AuthenticationRequest request){
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        return ResponseEntity.ok(authenticationService.authenticateUser(request));
+    }
+
+    @PostMapping("/company/authenticate")
+    public ResponseEntity<AuthResponse>authenticate2(@RequestBody AuthenticationRequest request){
+        return ResponseEntity.ok(authenticationService.authenticateCompany(request));
     }
 }

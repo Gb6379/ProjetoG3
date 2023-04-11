@@ -1,5 +1,7 @@
 package com.group3.projeto.models;
 
+import com.group3.projeto.enums.TokenType;
+import com.group3.projeto.repositories.CompanyRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,9 +28,16 @@ public class AuthenticationTokenModel {
 
     private Date createdDate;
 
-    @OneToOne(targetEntity = UserModel.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
+    @Enumerated(EnumType.STRING)
+    public TokenType tokenType = TokenType.BEARER;
+
+    @ManyToOne(targetEntity = UserModel.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private UserModel user;
+
+    @ManyToOne(targetEntity = CompanyModel.class, fetch = FetchType.EAGER)
+    @JoinColumn(name = "company_id")
+    private CompanyModel company;
 
     private Date expirationDate;
 

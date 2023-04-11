@@ -5,8 +5,11 @@ import com.group3.projeto.dto.CartListDto;
 import com.group3.projeto.models.OrderItemModel;
 import com.group3.projeto.models.OrderModel;
 import com.group3.projeto.models.UserModel;
+import com.group3.projeto.repositories.AuthRepository;
 import com.group3.projeto.repositories.OrderItemRepository;
 import com.group3.projeto.repositories.OrderRepository;
+import com.group3.projeto.res.ApiResponse;
+import com.group3.projeto.res.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -34,6 +37,10 @@ public class OrderService {
     @Autowired
     private UserService userService;
 
+    private JwtService jwtService;
+
+    private AuthRepository authRepository;
+
     public List<OrderModel> listOrders(Long user_id) {
         return orderRepository.findByUserId(user_id);
     }
@@ -41,7 +48,7 @@ public class OrderService {
     public OrderModel getOrderById(Long order_id){
         return orderRepository.findById(order_id).get();
     }
-    public void placeOrder(Long user_Id,String session_id){
+    public ApiResponse placeOrder(Long user_Id, String session_id){
         CartListDto cartList = cartService.getCartProducts(user_Id);
         UserModel user = userService.findUserById(user_Id);
         List<CartItemDto> cartItemDtoList = cartList.getcartItems();
@@ -66,6 +73,10 @@ public class OrderService {
         });
 
         cartService.deleteItems(user_Id);
+
+        return ApiResponse.builder().message("pedido feito")
+                .build();
+
 
     }
 
