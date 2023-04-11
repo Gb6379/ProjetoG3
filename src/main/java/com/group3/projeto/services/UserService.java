@@ -25,6 +25,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public UserModel findByMail(String userEmail){
+        return userRepository.findByEmail(userEmail).get();
+    }
+
     public UserModel save(UserModel user){//do the same thing as in addressService, but it would be better to have a specific methos to set user roles
         return userRepository.save(user);
     }

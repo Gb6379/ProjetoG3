@@ -7,6 +7,7 @@ import com.group3.projeto.models.ProductModel;
 import com.group3.projeto.models.UserModel;
 import com.group3.projeto.res.ApiResponse;
 import com.group3.projeto.services.CartService;
+import com.group3.projeto.services.JwtService;
 import com.group3.projeto.services.ProductService;
 import com.group3.projeto.services.UserService;
 import jakarta.validation.Valid;
@@ -26,14 +27,13 @@ import java.util.Set;
 @RequestMapping("/cart")
 public class CartController {
 
-    @Autowired
     private final CartService cartService;
 
-    @Autowired
     private final UserService userService;
 
-    @Autowired
     private final ProductService productService;
+
+    private final JwtService jwtService;
 
     @GetMapping
     public List<CartModel> list(){
@@ -54,22 +54,30 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public String addCart(@Valid @RequestBody AddCartDto addCartDto){//set the item's amount that's gonna be add and diminsh from its total amount
-        UserModel user = userService.findUserById(addCartDto.getUserId());
+    public String addCart(@Valid @RequestBody AddCartDto addCartDto, @RequestHeader (name="Authorization") String token){//set the item's amount that's gonna be add and diminsh from its total amount
+        var jwtToken = token.substring(7);
+        var userMail = jwtService.extractUser(jwtToken);
+        var user = userService.findByMail(userMail);
         ProductModel product = productService.getProduct(addCartDto.getProductId());
         return cartService.addCart(addCartDto, product, user);
     }
 
-    @PutMapping("/addItem/{user_id}/{product_id}")
-    public ResponseEntity<String> addItem(@PathVariable Long user_id, @PathVariable Long product_id){
-         cartService.addItem(user_id, product_id);
-        return new ResponseEntity<String>("Item adicionado",HttpStatus.OK);
+    @PutMapping("/addItem/{product_id}")
+    public ResponseEntity<String> addItem(@PathVariable Long product_id,  @RequestHeader (name="Authorization") String token){
+        var jwtToken = token.substring(7);
+        var userMail = jwtService.extractUser(jwtToken);
+        var user = userService.findByMail(userMail);
+        cartService.addItem(user.getId(), product_id);
+        return new ResponseEntity<String> ("Item adicionado",HttpStatus.OK);
     }
 
 
-    @DeleteMapping("/removeItem/{user_id}/{product_id}")
-    public String removeItem(@PathVariable Long user_id, @PathVariable Long product_id){
-        return cartService.deleteItem(user_id,product_id);
+    @DeleteMapping("/removeItem/{product_id}")
+    public String removeItem(@PathVariable Long product_id,@RequestHeader (name="Authorization") String token){
+        var jwtToken = token.substring(7);
+        var userMail = jwtService.extractUser(jwtToken);
+        var user = userService.findByMail(userMail);
+        return cartService.deleteItem(user.getId(),product_id);
     }
 
     @DeleteMapping("/emptyCart/{user_id}")

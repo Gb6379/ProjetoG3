@@ -23,12 +23,6 @@ public class OrderController {
     @Autowired
     private final OrderService orderService;
 
-    @Autowired
-    private final JwtService jwtService;
-
-    @Autowired
-    private final UserRepository userRepository;
-
     @GetMapping
     public List<OrderModel> listOrder(@PathVariable Long user_id){
         return orderService.listOrders(user_id);
@@ -40,7 +34,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse> saveOrder(@PathVariable Long user_id, @PathVariable String session_id){
-        return ResponseEntity.ok(orderService.placeOrder(user_id,session_id));
+    public ResponseEntity<ApiResponse> saveOrder(@RequestHeader (name="Authorization") String token){
+        return ResponseEntity.ok(orderService.placeOrder(token));
     }
+
 }

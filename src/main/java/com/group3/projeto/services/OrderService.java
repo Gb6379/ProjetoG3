@@ -8,6 +8,7 @@ import com.group3.projeto.models.UserModel;
 import com.group3.projeto.repositories.AuthRepository;
 import com.group3.projeto.repositories.OrderItemRepository;
 import com.group3.projeto.repositories.OrderRepository;
+import com.group3.projeto.repositories.UserRepository;
 import com.group3.projeto.res.ApiResponse;
 import com.group3.projeto.res.AuthResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,9 @@ public class OrderService {
     private CartService cartService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private UserService userService;
 
     private JwtService jwtService;
@@ -48,15 +52,18 @@ public class OrderService {
     public OrderModel getOrderById(Long order_id){
         return orderRepository.findById(order_id).get();
     }
-    public ApiResponse placeOrder(Long user_Id, String session_id){
-        CartListDto cartList = cartService.getCartProducts(user_Id);
-        UserModel user = userService.findUserById(user_Id);
+    public ApiResponse placeOrder(String token){
+        var jwtToken = token.substring(7);
+        var userMail = jwtService.extractUser(jwtToken);
+        var user = userRepository.findByEmail(userMail).get();
+        CartListDto cartList = cartService.getCartProducts(user.getId());
+        //UserModel user = userService.findUserById(user_Id);
         List<CartItemDto> cartItemDtoList = cartList.getcartItems();
 
         OrderModel newOrder =  new OrderModel();
         newOrder.setCreatedDate(new Date());
         newOrder.setUser(user);
-        newOrder.setSessionId(session_id);
+        //newOrder.setSessionId(session_id);
         newOrder.setTotalPrice(cartList.getTotalCost());
         orderRepository.save(newOrder);
 
@@ -72,7 +79,7 @@ public class OrderService {
 
         });
 
-        cartService.deleteItems(user_Id);
+        cartService.deleteItems(user.getId());
 
         return ApiResponse.builder().message("pedido feito")
                 .build();
