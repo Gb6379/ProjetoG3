@@ -43,7 +43,7 @@ public class UserModel implements UserDetails {
 
     private String password;
 
-    private int cpf;
+    private String cpf;
 
     private String phone;
 
@@ -62,13 +62,16 @@ public class UserModel implements UserDetails {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PaymentModel> payments;
 
+    @JsonManagedReference(value="userToken-reference")
     @OneToMany(mappedBy = "user")
     private List<AuthenticationTokenModel> tokens;
 
     @JsonIgnore
+    @JsonManagedReference(value="userOrder-reference")
     @OneToMany(mappedBy = "user",
             fetch = FetchType.LAZY)
     private List<OrderModel> orders;
+
 
 
     @Override

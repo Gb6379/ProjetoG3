@@ -26,15 +26,15 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**")//permit all in this list
-                .permitAll()
+                    .permitAll()
                 .anyRequest()//but any other resquest needs to be autheticated
-                .authenticated()
+                    .authenticated()
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jweAuthFiler, UsernamePasswordAuthenticationFilter.class);
+                    .authenticationProvider(authenticationProvider)
+                    .addFilterBefore(jweAuthFiler, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }

@@ -1,5 +1,6 @@
 package com.group3.projeto.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.group3.projeto.enums.TokenType;
 import com.group3.projeto.repositories.CompanyRepository;
 import jakarta.persistence.*;
@@ -22,24 +23,25 @@ public class AuthenticationTokenModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
+    @Column(unique = true)
     private String token;
-
-
-    private Date createdDate;
 
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;
 
-    @ManyToOne(targetEntity = UserModel.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private UserModel user;
+    @JsonBackReference(value="userToken-reference")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    public UserModel user;
 
-    @ManyToOne(targetEntity = CompanyModel.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_id")
-    private CompanyModel company;
+    @JsonBackReference(value="companyToken-reference")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    public CompanyModel company;
 
-    private Date expirationDate;
+    public boolean revoked;
+
+    public boolean expired;
 
 
 }

@@ -29,11 +29,13 @@ public class OrderModel {
     @Column(name = "total_price")
     private Double totalPrice;
 
+    @JsonManagedReference(value="orderI-reference")
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<OrderItemModel> orderItems;
 
     private String sessionId;
 
+    @JsonBackReference(value="userOder-reference")
     @ManyToOne()
     @JsonIgnore
     @JoinColumn(name = "user_id", referencedColumnName = "id")

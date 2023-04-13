@@ -9,6 +9,8 @@ import com.group3.projeto.models.UserModel;
 import com.group3.projeto.repositories.CartRepository;
 import com.group3.projeto.repositories.ProductRepository;
 import com.group3.projeto.repositories.UserRepository;
+import com.group3.projeto.res.ApiResponse;
+import com.group3.projeto.res.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,17 +56,28 @@ public class CartService {
         return new CartItemDto(cart);
     }
 
-    public CartModel updateCart(AddCartDto cartDto, ProductModel product, UserModel user, Long cart_id){
+    public ApiResponse updateCart(AddCartDto cartDto, ProductModel product, UserModel user){
         int amount = product.getAmount();
         amount = amount - cartDto.getQuantity();
         product.setAmount(amount);
         productRepository.save(product);
-        CartModel cartmodel = cartRepository.findById(cart_id).get();
+        var cart = cartRepository.findByUserId(user.getId());
+        cart.forEach(item -> {
+            if(item.getProduct().getId() == product.getId()){
+                item.setQuantity(cartDto.getQuantity());
+                item.setCreatedDate(new Date());
+                cartRepository.save(item);
+            }
+        });
+        /*CartModel cartmodel = cartRepository.findById(cart_id).get();
         cartmodel.setQuantity(cartDto.getQuantity());
         cartmodel.setCreatedDate(new Date());
-        return cartRepository.save(cartmodel);
+        return cartRepository.save(cartmodel);*/
 
-
+        return ApiResponse.builder()
+                .success(true)
+                .message("carrinho atualizado")
+                .build();
     }
 
     public String addCart(AddCartDto addCartDto, ProductModel product, UserModel user){

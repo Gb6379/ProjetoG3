@@ -53,6 +53,7 @@ public class CompanyModel implements UserDetails {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ProductModel> product;
 
+    @JsonManagedReference(value="companyToken-reference")
     @OneToMany(mappedBy = "company")
     private List<AuthenticationTokenModel> tokens;
 

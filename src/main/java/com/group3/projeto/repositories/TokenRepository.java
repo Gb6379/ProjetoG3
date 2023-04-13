@@ -8,12 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AuthRepository extends JpaRepository<AuthenticationTokenModel,Long> {
+public interface TokenRepository extends JpaRepository<AuthenticationTokenModel,Long> {
 
-    public AuthenticationTokenModel findTokenByUser(Long user_id);
-    public AuthenticationTokenModel findTokenByToken(String token);
-
-    List<AuthenticationTokenModel> findAllValidTokenByUser(Long id);
+    List<AuthenticationTokenModel> findAllValidTokenByUser(Integer id);
 
     Optional<AuthenticationTokenModel> findByToken(String token);
 }

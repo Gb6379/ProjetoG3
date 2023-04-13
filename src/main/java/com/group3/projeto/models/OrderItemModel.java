@@ -1,5 +1,6 @@
 package com.group3.projeto.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class OrderItemModel {
     @Column(name = "created_date")
     private Date createdDate;
 
+    @JsonBackReference(value="orderI-reference")
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "order_id", referencedColumnName = "id")
