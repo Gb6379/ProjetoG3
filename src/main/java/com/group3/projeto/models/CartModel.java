@@ -39,7 +39,7 @@ public class CartModel {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private ProductModel product;
 
-    @JsonIgnore
+
     @OneToOne(targetEntity = UserModel.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserModel user;

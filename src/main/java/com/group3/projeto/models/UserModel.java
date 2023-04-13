@@ -66,10 +66,10 @@ public class UserModel implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<AuthenticationTokenModel> tokens;
 
+
+    @JsonManagedReference(value="user-reference")
+    @OneToMany(mappedBy = "user")
     @JsonIgnore
-    @JsonManagedReference(value="userOrder-reference")
-    @OneToMany(mappedBy = "user",
-            fetch = FetchType.LAZY)
     private List<OrderModel> orders;
 
 

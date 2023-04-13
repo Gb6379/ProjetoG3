@@ -32,14 +32,15 @@ public class OrderItemModel {
     @Column(name = "created_date")
     private Date createdDate;
 
-    @JsonBackReference(value="orderI-reference")
-    @ManyToOne
-    @JsonIgnore
+    @JsonBackReference(value="orderItem-reference")
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private OrderModel order;
 
+
     @OneToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JsonIgnore
     private ProductModel product;
 
 }

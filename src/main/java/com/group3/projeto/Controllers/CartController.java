@@ -41,11 +41,11 @@ public class CartController {
     }*/
 
     @GetMapping
-    public ResponseEntity<CartListDto> getCartByUserId(@PathVariable Long user_id){
-        /*var jwtToken = token.substring(7);
+    public ResponseEntity<CartListDto> getCartByUserId(@RequestHeader (name="Authorization") String token){
+        var jwtToken = token.substring(7);
         var userMail = jwtService.extractUser(jwtToken);
-        var user = userService.findByMail(userMail);*/
-        CartListDto cart = cartService.getCartProducts(user_id);
+        var user = userService.findByMail(userMail);
+        CartListDto cart = cartService.getCartProducts(user.getId());
         return new ResponseEntity<CartListDto>(cart, HttpStatus.OK);
     }
 
