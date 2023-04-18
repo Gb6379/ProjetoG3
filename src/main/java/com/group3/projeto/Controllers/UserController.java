@@ -12,7 +12,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor//this annotation sets up the class contructos that would be necessary to initialize the UserService whithin the cointroller
 @RequestMapping("/users")
-//@CrossOrigin(origins = "http://localhost:9090")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class UserController {
 
     @Autowired

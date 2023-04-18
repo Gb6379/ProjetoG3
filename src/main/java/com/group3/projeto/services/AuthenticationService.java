@@ -50,6 +50,7 @@ public class AuthenticationService {
                     .name(request.getName())
                     .email(request.getEmail())
                     .cnpj(request.getCnpj())
+                    .phone(request.getPhone())
                     .password(passwordEncoder.encode(request.getPassword()))
                     .role(Role.COMPANY)
                     .build();
@@ -73,6 +74,7 @@ public class AuthenticationService {
                     .lastName(request.getLastname())
                     .email(request.getEmail())
                     .cpf(request.getCpf())
+                    .phone(request.getPhone())
                     .password(passwordEncoder.encode(request.getPassword()))
                     .role(Role.USER)
                     .build();

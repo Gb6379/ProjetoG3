@@ -45,7 +45,7 @@ public class UserModel implements UserDetails {
 
     private String cpf;
 
-    private String phone;
+    private int phone;
 
     @Enumerated(EnumType.STRING)
     private Role role;
