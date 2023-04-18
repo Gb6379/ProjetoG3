@@ -31,6 +31,10 @@ public class AddressService {
         return addressRepository.findById(id).orElseThrow(() -> new AddressExceptionNotFound("Endereço não existe"));//treat the especific address exception
     }
 
+    /*public List<AddressModel> getUsersAdresses(){
+        return
+    }*/
+
     public AddressModel saveAddres(AddressModel address, Long id){
         Optional<UserModel> userEntity = userRepository.findById(id);
         address.setUser(userEntity.get());

@@ -12,6 +12,7 @@ import com.group3.projeto.repositories.UserRepository;
 import com.group3.projeto.request.AuthenticationRequest;
 import com.group3.projeto.request.RegisterRequest;
 import com.group3.projeto.res.AuthResponse;
+import com.group3.projeto.res.RefreshTokenResponse;
 import com.nimbusds.openid.connect.sdk.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -59,16 +60,12 @@ public class AuthenticationService {
             return AuthResponse
                     .builder()
                     .token(jwtToken)
-                    .refreshToken(refreshToken)
                     .build();
 
         }else {
             var existentUser = userRepository.findByEmail(request.getEmail());
             if (existentUser.isPresent()) {
-                //throw new RuntimeException("usuario já existe");
-                return AuthResponse.builder().message("Usuario já existe")
-                        .build();
-
+                throw new RuntimeException("usuario já existe");
 
             }
             var user = UserModel.builder()
@@ -90,7 +87,6 @@ public class AuthenticationService {
             saveUserToken(savedUser, jwtToken);
             return AuthResponse.builder()
                     .token(jwtToken)
-                    .refreshToken(refreshToken)
                     .build();
         }
     }
@@ -106,6 +102,8 @@ public class AuthenticationService {
         saveUserToken(user, jwtToken);
         return AuthResponse.builder()
                 .token(jwtToken)
+                .username(user.getFirstName())
+                .userId(user.getId())
                 .build();
 
     }
@@ -173,8 +171,7 @@ public class AuthenticationService {
                 var accessToken = jwtService.generateTokenWithNoExtraClaims(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
-                var authResponse = AuthResponse.builder()
-                        .token(accessToken)
+                var authResponse = RefreshTokenResponse.builder()
                         .refreshToken(refreshToken)
                         .build();
                 new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
