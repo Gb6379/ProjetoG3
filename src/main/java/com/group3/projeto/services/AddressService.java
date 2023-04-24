@@ -31,10 +31,9 @@ public class AddressService {
         return addressRepository.findById(id).orElseThrow(() -> new AddressExceptionNotFound("Endereço não existe"));//treat the especific address exception
     }
 
-    /*public List<AddressModel> getUsersAdresses(){
-        return
-    }*/
-
+    public List<AddressModel> getUsersAdresses(Long user_id) {
+        return addressRepository.findByUserId(user_id);
+    }
     public AddressModel saveAddres(AddressModel address, Long id){
         Optional<UserModel> userEntity = userRepository.findById(id);
         address.setUser(userEntity.get());
@@ -49,6 +48,7 @@ public class AddressService {
             record.setCep(address.getCep());
             record.setCity(address.getCity());
             record.setState(address.getState());
+            record.setNumero(address.getNumero());
             return addressRepository.save(record);
         }).orElseGet(() -> {
             return addressRepository.save(address);

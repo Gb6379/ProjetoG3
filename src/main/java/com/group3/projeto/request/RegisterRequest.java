@@ -1,5 +1,6 @@
 package com.group3.projeto.request;
 
+import com.group3.projeto.models.AddressModel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +20,7 @@ public class RegisterRequest {
 
     private String cnpj;
 
-    private int phone;
+    private String phone;
 
     private String email;
 

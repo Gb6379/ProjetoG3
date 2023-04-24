@@ -34,6 +34,11 @@ public class AddressController {
         return addresService.getAddress(id);
     }
 
+    @GetMapping("/{user_id}")
+    public List<AddressModel> getUsersAddress(@PathVariable Long user_id){
+        return addresService.getUsersAdresses(user_id);
+    }
+
     @PostMapping("/user/{id}")
     public AddressModel save(@RequestBody AddressModel address, @PathVariable Long id){
         return addresService.saveAddres(address,id);

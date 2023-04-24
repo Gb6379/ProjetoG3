@@ -1,5 +1,6 @@
 package com.group3.projeto.services;
 
+import com.group3.projeto.dto.CompanyListProductsDto;
 import com.group3.projeto.models.CategoryModel;
 import com.group3.projeto.models.ProductModel;
 import com.group3.projeto.repositories.AuthRepository;
@@ -71,6 +72,8 @@ public class ProductService {
             record.setAmount(product.getAmount());
             record.setName(product.getName());
             record.setPrice(product.getPrice());
+            record.setImageUrl(product.getImageUrl());
+            record.setCategory(product.getCategory());
             return productRepository.save(record);
         }).orElseGet(() -> {
             return productRepository.save(product);
