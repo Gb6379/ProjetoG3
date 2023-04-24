@@ -6,17 +6,19 @@ import com.group3.projeto.request.RegisterRequest;
 import com.group3.projeto.res.AuthResponse;
 import com.group3.projeto.services.AuthenticationService;
 import com.nimbusds.openid.connect.sdk.AuthenticationResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
@@ -34,5 +36,13 @@ public class AuthenticationController {
     @PostMapping("/company/authenticate")
     public ResponseEntity<AuthResponse>authenticate2(@RequestBody AuthenticationRequest request){
         return ResponseEntity.ok(authenticationService.authenticateCompany(request));
+    }
+
+    @PostMapping("/refresh-token")
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        authenticationService.refreshToken(request, response);
     }
 }

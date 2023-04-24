@@ -1,4 +1,4 @@
-package com.group3.projeto.request;
+package com.group3.projeto.res;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,19 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class CompanyResponse {
 
+    private String message;
     private String name;
-
-    private  String lastname;
-
-    private String cpf;
-
     private String cnpj;
 
-    private int phone;
-
-    private String email;
-
-    private String password;
 }

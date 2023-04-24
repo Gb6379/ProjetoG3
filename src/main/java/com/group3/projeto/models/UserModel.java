@@ -43,9 +43,9 @@ public class UserModel implements UserDetails {
 
     private String password;
 
-    private int cpf;
+    private String cpf;
 
-    private String phone;
+    private int phone;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -62,13 +62,16 @@ public class UserModel implements UserDetails {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<PaymentModel> payments;
 
+    @JsonManagedReference(value="userToken-reference")
     @OneToMany(mappedBy = "user")
     private List<AuthenticationTokenModel> tokens;
 
+
+    @JsonManagedReference(value="user-reference")
+    @OneToMany(mappedBy = "user")
     @JsonIgnore
-    @OneToMany(mappedBy = "user",
-            fetch = FetchType.LAZY)
     private List<OrderModel> orders;
+
 
 
     @Override

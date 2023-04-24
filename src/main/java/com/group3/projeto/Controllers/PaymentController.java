@@ -11,6 +11,7 @@ import com.paypal.api.payments.Payment;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200/")
 public class PaymentController {
 
     @Autowired

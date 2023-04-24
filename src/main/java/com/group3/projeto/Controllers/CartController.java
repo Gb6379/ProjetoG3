@@ -25,6 +25,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 //this annotation sets up the class contructos that would be necessary to initialize the UserService whithin the cointroller
 @RequestMapping("/cart")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class CartController {
 
     private final CartService cartService;
@@ -35,22 +36,28 @@ public class CartController {
 
     private final JwtService jwtService;
 
-    @GetMapping
+    /*@GetMapping
     public List<CartModel> list(){
         return cartService.ListCarts();
-    }
+    }*/
 
-    @GetMapping("/{user_id}")
-    public ResponseEntity<CartListDto> getCartByUserId(@PathVariable Long user_id){
-        CartListDto cart = cartService.getCartProducts(user_id);
+    @GetMapping
+    public ResponseEntity<CartListDto> getCartByUserId(@RequestHeader (name="Authorization") String token){
+        var jwtToken = token.substring(7);
+        var userMail = jwtService.extractUser(jwtToken);
+        var user = userService.findByMail(userMail);
+        CartListDto cart = cartService.getCartProducts(user.getId());
         return new ResponseEntity<CartListDto>(cart, HttpStatus.OK);
     }
 
-    @PutMapping("/{cart_id}")
-    public CartModel update(@RequestBody AddCartDto cartDto, @PathVariable Long cart_id){
-        UserModel user = userService.findUserById(cartDto.getUserId());
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse> update(@RequestBody AddCartDto cartDto, @RequestHeader (name="Authorization") String token){
+        var jwtToken = token.substring(7);
+        var userMail = jwtService.extractUser(jwtToken);
+        var user = userService.findByMail(userMail);
         ProductModel product = productService.getProduct(cartDto.getProductId());
-        return cartService.updateCart(cartDto, product, user, cart_id);
+
+        return ResponseEntity.ok(cartService.updateCart(cartDto, product, user));
     }
 
     @PostMapping("/add")
@@ -80,9 +87,12 @@ public class CartController {
         return cartService.deleteItem(user.getId(),product_id);
     }
 
-    @DeleteMapping("/emptyCart/{user_id}")
-    public String deleteCartItems(@PathVariable Long user_id){
-        return cartService.deleteItems(user_id);
+    @DeleteMapping("/emptyCart")
+    public String deleteCartItems(@RequestHeader (name="Authorization") String token){
+        var jwtToken = token.substring(7);
+        var userMail = jwtService.extractUser(jwtToken);
+        var user = userService.findByMail(userMail);
+        return cartService.deleteItems(user.getId());
     }
 
     @DeleteMapping

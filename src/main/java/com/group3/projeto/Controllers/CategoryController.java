@@ -12,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 //this annotation sets up the class contructos that would be necessary to initialize the UserService whithin the cointroller
 @RequestMapping("/category")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class CategoryController {
 
     @Autowired
