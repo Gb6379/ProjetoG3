@@ -42,10 +42,8 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow();
     }
 
-    public ProductModel saveProductandCategory(ProductModel product,Long id, String token){
-        var jwtToken = token.substring(7);
-        var companyMail = jwtService.extractUser(jwtToken);
-        var company = companyRepository.findByEmail(companyMail).get();
+    public ProductModel saveProductandCategory(ProductModel product,Long id, Long company_id){
+        var company = companyRepository.findById(company_id).get();
         product.setCompany(company);
         Optional<CategoryModel> category = categoryRepository.findById(id);
         product.setCategory(category.get());

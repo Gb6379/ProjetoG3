@@ -106,7 +106,7 @@ public class AuthenticationService {
         saveUserToken(user, jwtToken);
         return AuthResponse.builder()
                 .token(jwtToken)
-                .username(user.getFirstName())
+                .username(user.getUsername())
                 .userId(user.getId())
                 .build();
 

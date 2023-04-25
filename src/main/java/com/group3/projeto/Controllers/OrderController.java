@@ -34,6 +34,11 @@ public class OrderController {
         return orderService.getOrderById(order_id);
     }
 
+    @GetMapping("/user/{user_id}")
+    public List<OrderModel> getuserOrder(@PathVariable Long user_id){
+        return orderService.listOrdersFromUser(user_id);
+    }
+
     @PostMapping("/{user_id}")
     public ResponseEntity<ApiResponse> saveOrder(@PathVariable Long user_id){
         return ResponseEntity.ok(orderService.placeOrder(user_id));
