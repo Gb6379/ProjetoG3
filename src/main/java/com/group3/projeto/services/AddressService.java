@@ -55,8 +55,8 @@ public class AddressService {
         });
     }
 
-    public void deleteAddress(Long id){
-        addressRepository.deleteById(id);
+    public void deleteAddress(Long address_id){
+        addressRepository.deleteById(address_id);
     }
 
     public void deleteAll(){

@@ -49,9 +49,9 @@ public class AddressController {
         return addresService.updateAddress(address,id);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-        addresService.deleteAddress(id);
+    @DeleteMapping("/{address_id}")
+    public void delete(@PathVariable Long address_id){
+        addresService.deleteAddress(address_id);
     }
 
 

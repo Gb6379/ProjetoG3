@@ -122,6 +122,8 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateTokenWithNoExtraClaims(company);
         saveCompanyToken(company,jwtToken);
         return AuthResponse.builder()
+                .username(company.getName())
+                .userId(company.getId())
                 .token(jwtToken)
                 .build();
 
