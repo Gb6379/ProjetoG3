@@ -34,8 +34,8 @@ public class AddressService {
     public List<AddressModel> getUsersAdresses(Long user_id) {
         return addressRepository.findByUserId(user_id);
     }
-    public AddressModel saveAddres(AddressModel address, Long id){
-        Optional<UserModel> userEntity = userRepository.findById(id);
+    public AddressModel saveAddres(AddressModel address, Long user_id){
+        Optional<UserModel> userEntity = userRepository.findById(user_id);
         address.setUser(userEntity.get());
         return addressRepository.save(address);
     }
