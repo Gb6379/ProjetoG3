@@ -34,8 +34,8 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ProductModel saveProduct(@RequestBody ProductModel product,@RequestHeader (name="Authorization") String token){
-        return productService.onlySaveProduct(product, token);
+    public ProductModel saveProduct(@RequestBody ProductModel product,@PathVariable Long company_id){
+        return productService.onlySaveProduct(product, company_id);
     }
 
     @PutMapping("/{id}")
