@@ -1,7 +1,9 @@
 package com.group3.projeto.services;
 
 import com.group3.projeto.models.CompanyModel;
+import com.group3.projeto.models.ProductModel;
 import com.group3.projeto.repositories.CompanyRepository;
+import com.group3.projeto.repositories.ProductRepository;
 import com.group3.projeto.res.CompanyResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +18,18 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
+    private final ProductRepository productRepository;
+
     public List<CompanyModel> listCompanies(){
         return companyRepository.findAll();
+    }
+
+    public CompanyModel getCompany(Long company_id){
+        return companyRepository.findById(company_id).get();
+    }
+
+    public List<ProductModel> getCompanyProducts(Long company_id){
+        return productRepository.findByCompanyId(company_id);
     }
 
     public CompanyResponse update(CompanyModel company,Long company_id){

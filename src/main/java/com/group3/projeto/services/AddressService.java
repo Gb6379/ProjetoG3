@@ -31,12 +31,11 @@ public class AddressService {
         return addressRepository.findById(id).orElseThrow(() -> new AddressExceptionNotFound("Endereço não existe"));//treat the especific address exception
     }
 
-    /*public List<AddressModel> getUsersAdresses(){
-        return
-    }*/
-
-    public AddressModel saveAddres(AddressModel address, Long id){
-        Optional<UserModel> userEntity = userRepository.findById(id);
+    public List<AddressModel> getUsersAdresses(Long user_id) {
+        return addressRepository.findByUserId(user_id);
+    }
+    public AddressModel saveAddres(AddressModel address, Long user_id){
+        Optional<UserModel> userEntity = userRepository.findById(user_id);
         address.setUser(userEntity.get());
         return addressRepository.save(address);
     }
@@ -49,14 +48,15 @@ public class AddressService {
             record.setCep(address.getCep());
             record.setCity(address.getCity());
             record.setState(address.getState());
+            record.setNumber(address.getNumber());
             return addressRepository.save(record);
         }).orElseGet(() -> {
             return addressRepository.save(address);
         });
     }
 
-    public void deleteAddress(Long id){
-        addressRepository.deleteById(id);
+    public void deleteAddress(Long address_id){
+        addressRepository.deleteById(address_id);
     }
 
     public void deleteAll(){

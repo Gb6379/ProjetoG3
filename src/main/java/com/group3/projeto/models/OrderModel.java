@@ -3,6 +3,7 @@ package com.group3.projeto.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.group3.projeto.enums.StatusOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,9 @@ public class OrderModel {
     private List<OrderItemModel> orderItems;
 
     private String sessionId;
+
+    @Enumerated(EnumType.STRING)
+    private StatusOrder status;
 
     @JsonBackReference(value="user-reference")
     @ManyToOne(fetch = FetchType.EAGER)

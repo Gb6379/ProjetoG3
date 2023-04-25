@@ -34,9 +34,14 @@ public class AddressController {
         return addresService.getAddress(id);
     }
 
-    @PostMapping("/user/{id}")
-    public AddressModel save(@RequestBody AddressModel address, @PathVariable Long id){
-        return addresService.saveAddres(address,id);
+    @GetMapping("/getAdresses/{user_id}")
+    public List<AddressModel> getUsersAddress(@PathVariable Long user_id){
+        return addresService.getUsersAdresses(user_id);
+    }
+
+    @PostMapping("/user/{user_id}")
+    public AddressModel save(@RequestBody AddressModel address, @PathVariable Long user_id){
+        return addresService.saveAddres(address,user_id);
     }
 
     @PutMapping("/{id}")
@@ -44,9 +49,9 @@ public class AddressController {
         return addresService.updateAddress(address,id);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-        addresService.deleteAddress(id);
+    @DeleteMapping("/{address_id}")
+    public void delete(@PathVariable Long address_id){
+        addresService.deleteAddress(address_id);
     }
 
 

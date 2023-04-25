@@ -1,5 +1,6 @@
 package com.group3.projeto.services;
 
+import com.group3.projeto.dto.CompanyListProductsDto;
 import com.group3.projeto.models.CategoryModel;
 import com.group3.projeto.models.ProductModel;
 import com.group3.projeto.repositories.AuthRepository;
@@ -51,10 +52,8 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public ProductModel onlySaveProduct(ProductModel product, String token){
-        var jwtToken = token.substring(7);
-        var companyMail = jwtService.extractUser(jwtToken);
-        var company = companyRepository.findByEmail(companyMail).get();
+    public ProductModel onlySaveProduct(ProductModel product, Long company_id){
+        var company = companyRepository.findById(company_id).get();
         product.setCompany(company);
         return productRepository.save(product);
     }
@@ -75,6 +74,8 @@ public class ProductService {
             record.setAmount(product.getAmount());
             record.setName(product.getName());
             record.setPrice(product.getPrice());
+            record.setImageUrl(product.getImageUrl());
+            record.setCategory(product.getCategory());
             return productRepository.save(record);
         }).orElseGet(() -> {
             return productRepository.save(product);

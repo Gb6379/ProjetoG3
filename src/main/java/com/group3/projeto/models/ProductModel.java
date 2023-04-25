@@ -29,7 +29,7 @@ public class ProductModel {
 
     private double price;
 
-    private String imageUrl;
+    private Byte imageUrl;
 
     private int amount;
 

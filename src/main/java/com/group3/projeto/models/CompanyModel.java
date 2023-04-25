@@ -2,6 +2,7 @@ package com.group3.projeto.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.group3.projeto.enums.Role;
+import com.group3.projeto.enums.StatusCompany;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,7 +38,12 @@ public class CompanyModel implements UserDetails {
 
     private String email;
 
-    private int phone;
+    private String phone;
+
+    private Byte image;
+
+    @Enumerated(EnumType.STRING)
+    private StatusCompany status;
 
     @Enumerated(EnumType.STRING)
     private Role role;

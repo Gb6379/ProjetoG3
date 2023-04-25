@@ -34,6 +34,8 @@ public class AddressModel {
 
     private String cep;
 
+    private String number;
+
     @JsonBackReference(value="address-reference")
     @ManyToOne()
     @JoinColumn(name="user_id", referencedColumnName = "id")

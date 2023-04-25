@@ -52,12 +52,10 @@ public class OrderService {
     public OrderModel getOrderById(Long order_id){
         return orderRepository.findById(order_id).get();
     }
-    public ApiResponse placeOrder(String token){
-        var jwtToken = token.substring(7);
-        var userMail = jwtService.extractUser(jwtToken);
-        var user = userRepository.findByEmail(userMail).get();
+    public ApiResponse placeOrder(Long user_id){
+        UserModel user = userService.findUserById(user_id);
         CartListDto cartList = cartService.getCartProducts(user.getId());
-        //UserModel user = userService.findUserById(user_Id);
+
         List<CartItemDto> cartItemDtoList = cartList.getcartItems();
 
         OrderModel newOrder =  new OrderModel();

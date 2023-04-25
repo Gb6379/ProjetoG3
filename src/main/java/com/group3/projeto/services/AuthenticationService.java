@@ -6,6 +6,7 @@ import com.group3.projeto.enums.TokenType;
 import com.group3.projeto.models.AuthenticationTokenModel;
 import com.group3.projeto.models.CompanyModel;
 import com.group3.projeto.models.UserModel;
+import com.group3.projeto.repositories.AddressRepository;
 import com.group3.projeto.repositories.AuthRepository;
 import com.group3.projeto.repositories.CompanyRepository;
 import com.group3.projeto.repositories.UserRepository;
@@ -40,7 +41,6 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
     private final AuthRepository authRepository;
 
     public AuthResponse register(RegisterRequest request){//do a register only for company or verify on the request if it cotains cpf or cnpj
@@ -79,6 +79,8 @@ public class AuthenticationService {
                     .role(Role.USER)
                     .build();
 
+            /*request.getAddressModel().setUser(user);
+            addressRepository.save(request.getAddressModel());*/
 
             var savedUser = userRepository.save(user);
 
@@ -120,6 +122,8 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateTokenWithNoExtraClaims(company);
         saveCompanyToken(company,jwtToken);
         return AuthResponse.builder()
+                .username(company.getName())
+                .userId(company.getId())
                 .token(jwtToken)
                 .build();
 
