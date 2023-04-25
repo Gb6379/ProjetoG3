@@ -29,8 +29,8 @@ public class ProductController {
     }
 
     @PostMapping("/category/{category_id}")
-    public ProductModel save(@RequestBody ProductModel product, @PathVariable Long category_id){
-        return productService.saveProductandCategory(product, category_id);
+    public ProductModel save(@RequestBody ProductModel product, @PathVariable Long category_id, @RequestHeader (name="Authorization") String token){
+        return productService.saveProductandCategory(product, category_id, token);
     }
 
     @PostMapping()
