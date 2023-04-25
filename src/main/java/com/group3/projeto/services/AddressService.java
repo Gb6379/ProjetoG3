@@ -48,7 +48,7 @@ public class AddressService {
             record.setCep(address.getCep());
             record.setCity(address.getCity());
             record.setState(address.getState());
-            record.setNumero(address.getNumero());
+            record.setNumber(address.getNumber());
             return addressRepository.save(record);
         }).orElseGet(() -> {
             return addressRepository.save(address);

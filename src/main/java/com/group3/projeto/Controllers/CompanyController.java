@@ -15,7 +15,7 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
-    @GetMapping("/{company_id}")
+    @GetMapping("/products/{company_id}")
     public List<ProductModel> getProducts(@PathVariable Long company_id){
         return companyService.getCompanyProducts(company_id);
     }

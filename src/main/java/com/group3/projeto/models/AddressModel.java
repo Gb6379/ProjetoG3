@@ -34,7 +34,7 @@ public class AddressModel {
 
     private String cep;
 
-    private String numero;
+    private String number;
 
     @JsonBackReference(value="address-reference")
     @ManyToOne()

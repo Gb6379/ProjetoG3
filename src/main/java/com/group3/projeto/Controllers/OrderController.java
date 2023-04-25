@@ -29,14 +29,14 @@ public class OrderController {
         return orderService.listOrders(user_id);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{order_id}")
     public OrderModel getOrder(@PathVariable Long order_id){
         return orderService.getOrderById(order_id);
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> saveOrder(@RequestHeader (name="Authorization") String token){
-        return ResponseEntity.ok(orderService.placeOrder(token));
+    @PostMapping("/{user_id}")
+    public ResponseEntity<ApiResponse> saveOrder(@PathVariable Long user_id){
+        return ResponseEntity.ok(orderService.placeOrder(user_id));
     }
 
 }
